@@ -1,3 +1,5 @@
+import 'dart:math';
+
 // Challenge 1
 // Flutter module makes multiple, parallel, requests to a web service, and
 // shares the result with the host app. We'll use the "balldontlie" API for this
@@ -19,6 +21,19 @@
 // two of which are objects with x & y values, and the third being the distance,
 // e.g. {x:50, y:60}, {x: 100, y: 100}, 10. The expected result is a similar
 // object with the new co-ordinate.
+  movePoint(Map pt1, Map pt2, int distanceToMove){
+  //calculate distance between these two points first
+    //d(P;Q)=p(x2−x1)2+(y2−y1)2
+    double totalDistance = sqrt((pt2['x']*pt2['x']-pt1['x']*pt1['x'])+(pt2['y']*pt2['y']-pt1['y']*pt1['y']));
+    double m1 = distanceToMove.toDouble();
+    double m2 = totalDistance-distanceToMove;
 
+    double xCord = ((m1*pt2['x'])+(m2*pt1['x']))/(m1+m2);
+    double yCord =  ((m1*pt2['y'])+(m2*pt1['y']))/(m1+m2);
+     return {'x':xCord.toInt(), 'y':yCord.toInt()};
+  }
 main() {
+
+    print(movePoint({'x':50, 'y':60}, {'x': 100, 'y': 100},10));
+    print(movePoint({'x':0, 'y':0}, {'x': 0, 'y': 10},5));
 }
