@@ -35,39 +35,30 @@ import 'network_helper.dart';
     double yCord =  ((m1*pt2['y'])+(m2*pt1['y']))/(m1+m2);
      return {'x':xCord.toInt(), 'y':yCord.toInt()};
   }
+  
+  
+  avgWeight(int n){
+    List playersWeight=[];
+    Executor executor = Executor(concurrency: 3);
+    for (int i = 0; i < n; i++) {
+      executor.scheduleTask(() async {
+        int currentPlayerWeight = await PlayerDetail(i+1).fetchPlayerWeight();
+        print('courrentPlayerNo: ${i+1} currentPlayerWeight : $currentPlayerWeight ');
+
+        if(currentPlayerWeight!=null){
+          playersWeight.add(currentPlayerWeight);
+        }
+
+      });
+      print(playersWeight);
+      print('i+1 is ${i+1}');
+    }
+  }
 
 Future main() async{
 
 //    print(movePoint({'x':50, 'y':60}, {'x': 100, 'y': 100},10));
 //    print(movePoint({'x':0, 'y':0}, {'x': 0, 'y': 10},5));
-    double avgWeight = 0;
-    int count =0;
-
-//    do{
-//
-//      avgWeight = (avgWeight +avgWeight)/count;
-//    }while (count==3);
-
-//   print(await PlayerDetail(2).fetchPlayerWeight());
-//   print(await getPlayerWeight(2));
-  Executor executor = Executor(concurrency: 3);
-  // only 10 of them will be running at a time
-  main:for (int i = 0; i < 10; i++) {
-     executor.scheduleTask(() async {
-      int currentPlayerWeight = await PlayerDetail(i+1).fetchPlayerWeight();
-      print('courrentPlayerNo: ${i+1} currentPlayerWeight : $currentPlayerWeight ');
-      if( avgWeight ==0){
-        avgWeight =  currentPlayerWeight.toDouble();
-      }
-      if(currentPlayerWeight==null){
-        avgWeight = avgWeight;
-      }else{
-        avgWeight =(avgWeight+currentPlayerWeight)/2;
-      }
-
-//      avgWeight = (avgWeight+currentPlayerWeight)/count;
-//      print('avgWeight is $avgWeight');
-    });
-  }
-
+    
+  avgWeight(4);
 }
