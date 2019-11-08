@@ -1,3 +1,4 @@
+import 'dart:cli';
 import 'dart:math';
 import 'package:executor/executor.dart';
 
@@ -36,29 +37,31 @@ import 'network_helper.dart';
      return {'x':xCord.toInt(), 'y':yCord.toInt()};
   }
   
-  
-  avgWeight(int n){
+  Future<double> avgWeight(int n)async {
     List playersWeight=[];
     Executor executor = Executor(concurrency: 3);
     for (int i = 0; i < n; i++) {
+//      executor.join(withWaiting: true).;
       executor.scheduleTask(() async {
         int currentPlayerWeight = await PlayerDetail(i+1).fetchPlayerWeight();
-        print('courrentPlayerNo: ${i+1} currentPlayerWeight : $currentPlayerWeight ');
+//        print('courrentPlayerNo: ${i+1} currentPlayerWeight : $currentPlayerWeight ');
 
         if(currentPlayerWeight!=null){
-          playersWeight.add(currentPlayerWeight);
+           playersWeight.add(currentPlayerWeight);
         }
-
       });
-      print(playersWeight);
-      print('i+1 is ${i+1}');
-    }
+    }//for debugging only. this shuld be printed only when all tasks are completed.
+    await  executor.join(withWaiting:true);
+    print(playersWeight);
+    //playersWeight.reduce((a, b) => a + b) / playersWeight.length
+    return playersWeight.reduce((a, b) => a + b) / playersWeight.length;
   }
+
 
 Future main() async{
 
 //    print(movePoint({'x':50, 'y':60}, {'x': 100, 'y': 100},10));
 //    print(movePoint({'x':0, 'y':0}, {'x': 0, 'y': 10},5));
     
-  avgWeight(4);
+  print(await avgWeight(5));
 }
