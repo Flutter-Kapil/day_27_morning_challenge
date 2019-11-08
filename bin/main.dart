@@ -28,7 +28,11 @@ import 'network_helper.dart';
   movePoint(Map pt1, Map pt2, int distanceToMove){
   //calculate distance between these two points first
     //d(P;Q)=p(x2−x1)2+(y2−y1)2
+
     double totalDistance = sqrt((pt2['x']*pt2['x']-pt1['x']*pt1['x'])+(pt2['y']*pt2['y']-pt1['y']*pt1['y']));
+    if(totalDistance ==0 || totalDistance < distanceToMove){
+      return null;
+    }
     double m1 = distanceToMove.toDouble();
     double m2 = totalDistance-distanceToMove;
 
@@ -52,7 +56,7 @@ import 'network_helper.dart';
       });
     }//for debugging only. this shuld be printed only when all tasks are completed.
     await  executor.join(withWaiting:true);
-    print(playersWeight);
+//    print(playersWeight);
     //playersWeight.reduce((a, b) => a + b) / playersWeight.length
     return playersWeight.reduce((a, b) => a + b) / playersWeight.length;
   }
@@ -61,7 +65,7 @@ import 'network_helper.dart';
 Future main() async{
 
 //    print(movePoint({'x':50, 'y':60}, {'x': 100, 'y': 100},10));
-//    print(movePoint({'x':0, 'y':0}, {'x': 0, 'y': 10},5));
+    print(movePoint({'x':0, 'y':0}, {'x': 0, 'y': 10},10));
     
   print(await avgWeight(5));
 }
